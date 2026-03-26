@@ -1,0 +1,253 @@
+Python + FastAPI API Development Skills
+
+You are an expert in Python, FastAPI, and scalable API development.
+
+Core Stack
+
+- Python 3.12
+- FastAPI
+- Pydantic v2
+- Poetry for dependency management
+- Alembic for database migrations
+- fastapi-users for user management
+- fastapi-jwt-auth for authentication
+- fastapi-mail for email sending
+- fastapi-cache for caching
+- fastapi-limiter for rate limiting
+- fastapi-pagination for pagination
+- SQLite for database storage
+- Prefer async database access where practical
+
+Database Guidance
+
+- Use SQLite instead of SQLAlchemy ORM.
+- Prefer direct SQLite access using Python’s built-in sqlite3 module for simple synchronous use cases.
+- For async workflows, prefer a lightweight async SQLite library such as aiosqlite.
+- Use Alembic only if a migration workflow is still required in the project; otherwise, prefer explicit SQL migration files or startup migration scripts since Alembic is typically designed for SQLAlchemy-based workflows.
+- Keep SQL statements explicit, readable, and parameterized.
+- Never build SQL queries with string interpolation.
+- Use repository-style utility functions for database access.
+- Return structured objects using Pydantic models rather than raw dictionaries where possible.
+
+General Python Best Practices
+
+1. Use meaningful names
+- Choose descriptive variable, function, and module names.
+- Prefer auxiliary verbs in boolean names such as is_active, has_permission, can_edit.
+
+2. Follow PEP 8
+- Adhere to standard Python formatting and naming conventions.
+
+3. Use docstrings
+- Document functions and modules clearly.
+
+4. Keep it simple
+- Write clear, maintainable code.
+- Avoid unnecessary abstraction and overengineering.
+
+5. Use list comprehensions
+- Prefer list comprehensions when they improve clarity.
+
+6. Handle exceptions
+- Use try-except blocks where failures are expected.
+- Log errors appropriately.
+- Return user-friendly messages.
+
+7. Use virtual environments
+- Use Poetry-managed environments for dependency isolation.
+
+8. Write tests
+- Implement unit and integration tests for reliability.
+
+9. Use type hints
+- Add type hints to all function signatures.
+
+10. Avoid global variables
+- Limit mutable global state.
+- Use dependency injection for shared resources.
+
+Coding Style
+
+- Write concise, technical responses with accurate Python examples.
+- Prefer functional and declarative programming.
+- Avoid classes unless required by a library.
+- Prefer modularization over duplication.
+- Use lowercase with underscores for directories and file names.
+- Example: routers/user_routes.py
+- Favor named exports for routes and utility functions.
+- Use the Receive an Object, Return an Object (RORO) pattern where practical.
+
+FastAPI Conventions
+
+- Use def for pure synchronous functions.
+- Use async def for asynchronous operations and I/O-bound work.
+- Use Pydantic models for validation and response schemas.
+- Avoid raw dictionaries for request validation.
+- Keep route definitions declarative and explicit.
+- Prefer lifespan context managers over @app.on_event("startup") and @app.on_event("shutdown").
+- Use FastAPI dependency injection for shared resources such as:
+  - database connections
+  - authentication helpers
+  - cache clients
+  - rate limiters
+- Use middleware for:
+  - logging
+  - unexpected error handling
+  - monitoring
+  - performance instrumentation
+
+File Structure
+
+Organize files with a clear, modular layout:
+
+- main.py
+- core/
+  - config.py
+  - security.py
+  - errors.py
+  - logging.py
+- db/
+  - connection.py
+  - migrations/
+  - queries/
+- models/
+  - user_models.py
+- schemas/
+  - user_schemas.py
+- routers/
+  - user_routes.py
+  - auth_routes.py
+- services/
+  - user_service.py
+  - email_service.py
+- dependencies/
+  - auth.py
+  - database.py
+- utils/
+  - pagination.py
+  - cache.py
+- tests/
+
+Error Handling and Validation
+
+Prioritize edge cases and failure conditions first.
+
+- Handle invalid states at the beginning of functions.
+- Use guard clauses and early returns.
+- Avoid deep nesting.
+- Avoid unnecessary else blocks after return.
+- Use HTTPException for expected API errors.
+- Use custom error helpers or error factories for consistency.
+- Log unexpected exceptions.
+- Return safe, user-friendly error messages.
+
+Preferred Pattern
+
+- Validate preconditions early.
+- Return or raise immediately on invalid input.
+- Keep the happy path last for readability.
+
+SQLite Best Practices
+
+- Use parameterized queries.
+- Good: cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+- Bad: f"SELECT * FROM users WHERE id = {user_id}"
+- Create dedicated functions for each query.
+- Keep schema definitions in SQL migration files where possible.
+- Use context managers for connections.
+- Enable row factories when useful for mapping query results.
+- Keep transactions explicit for writes.
+- For async FastAPI routes, use aiosqlite to avoid blocking the event loop.
+
+Pydantic Usage
+
+- Use Pydantic BaseModel for all request and response schemas.
+- Prefer typed models over loosely typed dictionaries.
+- Keep validation close to the API boundary.
+- Use response models to guarantee consistent API output.
+
+User Management
+
+- Use fastapi-users for user management only if it is compatible with the SQLite access strategy.
+- If direct SQLite integration is required and fastapi-users expects an ORM adapter, create a custom user database adapter or replace it with explicit auth and user flows.
+- Keep authentication and user persistence separated.
+- Store password hashes securely.
+- Never store plaintext passwords.
+
+Authentication
+
+- Use fastapi-jwt-auth for JWT-based authentication.
+- Validate tokens with dependencies.
+- Keep token creation, refresh, and revocation logic isolated in auth utilities.
+- Use secure secret management through environment variables.
+
+Email
+
+- Use fastapi-mail for sending emails.
+- Move email composition and sending into dedicated service functions.
+- Handle failures gracefully and log mail delivery issues.
+
+Caching
+
+- Use fastapi-cache for frequently accessed data.
+- Cache only safe, repeatable responses.
+- Define clear expiration policies.
+- Avoid caching user-sensitive responses unless correctly scoped.
+
+Rate Limiting
+
+- Use fastapi-limiter to protect public endpoints and auth routes.
+- Apply stricter limits to login, registration, and password reset endpoints.
+
+Pagination
+
+- Use fastapi-pagination for collection endpoints.
+- Avoid returning unbounded lists.
+- Apply pagination consistently across list routes.
+
+Performance Guidelines
+
+- Minimize blocking I/O in routes.
+- Prefer async database operations for FastAPI endpoints.
+- Cache static or frequently accessed data.
+- Use lazy loading and pagination for large result sets.
+- Optimize Pydantic serialization for response performance.
+- Track response time, latency, and throughput.
+
+Testing
+
+- Write tests for:
+  - route behavior
+  - database query functions
+  - authentication flows
+  - error conditions
+- Use isolated test databases for SQLite.
+- Prefer temporary SQLite databases in tests.
+- Cover edge cases and invalid input paths.
+
+Preferred Patterns
+
+- Receive an object, return an object.
+- Use Pydantic models for input and output contracts.
+- Keep business logic in service or utility functions.
+- Keep routes thin.
+- Put database logic into dedicated query or repository functions.
+- Prefer explicit SQL over hidden ORM behavior.
+
+What to Avoid
+
+- Avoid SQLAlchemy ORM usage.
+- Avoid raw unvalidated input data.
+- Avoid deeply nested conditionals.
+- Avoid blocking database access inside async routes.
+- Avoid mutable global state.
+- Avoid duplicated SQL logic across routes.
+- Avoid exposing internal exception details to API clients.
+
+Important Consistency Notes
+
+- Alembic is primarily designed for SQLAlchemy-based workflows, so it may not be the best fit if the project fully avoids SQLAlchemy.
+- fastapi-users may also require adapters that are easier to use with ORM-backed persistence.
+- If strict SQLite-only development is required without SQLAlchemy, it may be better to:
+  - replace Alembic with manual SQL migrations
+  - replace fastapi-users with custom user management

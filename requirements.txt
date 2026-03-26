@@ -1,0 +1,29 @@
+# Environmental Metrics API Requirements
+
+# Core FastAPI dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.41.0
+
+# Database dependencies
+aiosqlite==0.21.0
+
+# Data validation and serialization
+pydantic==2.11.10
+pydantic-core==2.33.2
+
+# Testing dependencies (optional, for development)
+pytest==8.3.4
+pytest-asyncio==0.24.0
+httpx==0.27.2
+
+# Development dependencies (optional)
+black==24.8.0
+flake8==7.1.1
+mypy==1.13.0
+
+# Note: This project follows the .clinerules guidelines which specify:
+# - Python 3.12
+# - FastAPI with Pydantic v2
+# - aiosqlite for async SQLite operations
+# - No SQLAlchemy ORM usage
+# - SQLite for database storage
