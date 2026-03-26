@@ -590,26 +590,3 @@ The project includes unit tests that can be run with:
 ```bash
 python -m pytest tests/ -v
 ```
-
-### Code Style
-
-The project follows PEP 8 guidelines and uses type hints throughout. Consider using tools like:
-- `black` for code formatting
-- `flake8` for linting
-- `mypy` for type checking
-
-### Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes with tests
-4. Ensure all tests pass
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For questions, issues, or feature requests, please create an issue in the repository or contact the development team.
